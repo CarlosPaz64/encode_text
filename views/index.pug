@@ -1,0 +1,53 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Menú de Cifrado de Texto
+    link(rel="stylesheet", href="/css/styles.css")
+    script.
+      function mostrarTextoCifrado() {
+        document.getElementById('texto-cifrado').style.display = 'block';
+        document.getElementById('boton-ok').style.display = 'block';
+      }
+      function mostrarVistaIndex() {
+        document.getElementById('vista-cifrar').style.display = 'none';
+        document.getElementById('vista-index').style.display = 'block';
+      }
+      function submitFormAndShowText() {
+      console.log("Submit button clicked");
+      document.querySelector('form').submit();
+      mostrarTextoCifrado();
+      return false; // To prevent form submission from refreshing the page
+      }
+
+  body
+    header
+      h1 Menú de Cifrado de Texto
+
+    main(id="vista-index")
+      form(action="/cifrar", method="POST")
+        .input-container
+          label(for="texto-a-cifrar") Texto a Cifrar:
+          input(type="text", id="texto-a-cifrar", name="texto-a-cifrar", placeholder="Ingresa el texto a cifrar", required)
+
+        .input-container
+          label(for="clave-cifrado") Clave de Cifrado:
+          input(type="text", id="clave-cifrado", name="clave-cifrado", placeholder="Ingresa la clave de cifrado")
+
+        .input-container
+          label(for="algoritmo") Algoritmo de Cifrado:
+          select(id="algoritmo", name="algoritmo")
+            option(value="cesar") Código César
+            option(value="sustitucion") Sustitución
+            option(value="base64") Base64
+            option(value="hexadecimal") Hexadecimal
+            option(value="binario") Binario
+
+        button(type="button" onclick="submitFormAndShowText()") Convertir
+
+    main(id="vista-cifrar", style="display:none")
+      .output-container
+        label(for="texto-cifrado") Texto Cifrado:
+        input(type="text", id="texto-cifrado", name="texto-cifrado", placeholder="Texto cifrado", readonly)
+        button(type="button" onclick="mostrarVistaIndex()" id="boton-ok" style="display:none") OK!

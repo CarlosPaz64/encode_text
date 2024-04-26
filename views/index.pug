@@ -5,20 +5,25 @@ html(lang="es")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Menú de Cifrado de Texto
     link(rel="stylesheet", href="/css/styles.css")
+    style.
+      .hidden {
+        display: none;
+      }
+
     script.
       function mostrarTextoCifrado() {
-        document.getElementById('texto-cifrado').style.display = 'block';
-        document.getElementById('boton-ok').style.display = 'block';
+        document.getElementById('texto-cifrado').classList.remove('hidden');
+        document.getElementById('boton-ok').classList.remove('hidden');
       }
       function mostrarVistaIndex() {
-        document.getElementById('vista-cifrar').style.display = 'none';
-        document.getElementById('vista-index').style.display = 'block';
+        document.getElementById('vista-cifrar').classList.add('hidden');
+        document.getElementById('vista-index').classList.remove('hidden');
       }
       function submitFormAndShowText() {
-      console.log("Submit button clicked");
-      document.querySelector('form').submit();
-      mostrarTextoCifrado();
-      return false; // To prevent form submission from refreshing the page
+        console.log("Submit button clicked");
+        document.querySelector('form').submit();
+        mostrarTextoCifrado();
+        return false; // To prevent form submission from refreshing the page
       }
 
   body
@@ -46,8 +51,8 @@ html(lang="es")
 
         button(type="button" onclick="submitFormAndShowText()") Convertir
 
-    main(id="vista-cifrar", style="display:none")
+    main(id="vista-cifrar", class="hidden")
       .output-container
         label(for="texto-cifrado") Texto Cifrado:
         input(type="text", id="texto-cifrado", name="texto-cifrado", placeholder="Texto cifrado", readonly)
-        button(type="button" onclick="mostrarVistaIndex()" id="boton-ok" style="display:none") OK!
+        button(type="button" onclick="mostrarVistaIndex()" id="boton-ok" class="hidden") OK!

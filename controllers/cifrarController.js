@@ -6,6 +6,7 @@ const cifrarHexa = require('../encode/cifrarHexa');
 const cifrarBase = require('../encode/cifrarBase');
 
 function cifrarTexto(req, res) {
+    console.log(req.body);
     const texto = req.body['texto-a-cifrar'];
     const clave = req.body['clave-cifrado'];
     const algoritmo = req.body['algoritmo'];
@@ -32,7 +33,7 @@ function cifrarTexto(req, res) {
             return res.status(400).send('Algoritmo de cifrado no válido');
     }
 
-    res.render('index', { textoCifrado });
+    res.render('cifrar', { textoCifrado });
 }
 
 module.exports = {

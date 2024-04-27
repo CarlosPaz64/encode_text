@@ -1,25 +1,27 @@
 extends header
 
 block content
-    .registro-container
-      h2 Registro de Usuario
-      form(action="/registro", method="POST")
-        .form-group
-          label(for="nombre") Nombre:
-          input(type="text", id="nombre", name="nombre", placeholder="Ingresa tu nombre", required)
-        .form-group
-          label(for="apellido-paterno") Apellido Paterno:
-          input(type="text", id="apellido-paterno", name="apellido-paterno", placeholder="Ingresa tu apellido paterno", required)
-        .form-group
-          label(for="apellido-materno") Apellido Materno:
-          input(type="text", id="apellido-materno", name="apellido-materno", placeholder="Ingresa tu apellido materno", required)
-        .form-group
-          label(for="usuario") Usuario:
-          input(type="text", id="usuario", name="usuario", placeholder="Ingresa tu usuario", required)
-        .form-group
-          label(for="correo") Correo Electrónico:
-          input(type="email", id="correo", name="correo", placeholder="Ingresa tu correo electrónico", required)
-        .form-group
-          label(for="password") Contraseña:
-          input(type="password", id="password", name="password", placeholder="Ingresa tu contraseña", required)
-        button(type="submit") Registrarse
+  link(rel="stylesheet", href="/css/styles.css")
+
+  main(id="registro")
+    h2 Registro de Usuario
+    form(action="/registro", method="POST")
+      .form-group
+        label(for="nombre") Nombre:
+        input(type="text", id="nombre", name="nombre", placeholder="Ingresa tu nombre", required)
+      .form-group
+        label(for="apellido-paterno") Apellido Paterno:
+        input(type="text", id="apellido-paterno", name="apellidoPaterno", placeholder="Ingresa tu apellido paterno", required)
+      .form-group
+        label(for="apellido-materno") Apellido Materno:
+        input(type="text", id="apellido-materno", name="apellidoMaterno", placeholder="Ingresa tu apellido materno")
+      .form-group
+        label(for="usuario") Usuario:
+        input(type="text", id="usuario", name="usuario", placeholder="Ingresa tu usuario", required)
+      .form-group
+        label(for="correo") Correo Electrónico:
+        input(type="email", id="correo", name="correo", placeholder="Ingresa tu correo electrónico", required)
+      .form-group
+        label(for="password") Contraseña:
+        input(type="password", id="password", name="contraseña", placeholder="Ingresa tu contraseña", required)
+      button(type="submit") Registrarse

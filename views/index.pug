@@ -4,9 +4,6 @@ block content
   link(rel="stylesheet", href="/css/styles.css")
 
   main(id="vista-index")
-    p Tienes #{creditosDisponibles} créditos disponibles.
-
-    - if (creditosDisponibles > 0)
       form(action="/cifrar", method="POST" id="cifrar-form")
         .input-container
           label(for="texto-a-cifrar") Texto a Cifrar:
@@ -22,9 +19,7 @@ block content
             option(value="cesar") Código César
             option(value="sustitucion") Sustitución
             option(value="base") Base64
-            option(value="hexadecimal") Hexadecimal
+            option(value="hexa") Hexadecimal
             option(value="binario") Binario
 
         button(type="submit" id="submit-btn") Convertir
-    - else
-      p No tienes créditos disponibles para cifrar. Por favor, inicia sesión para obtener más créditos.

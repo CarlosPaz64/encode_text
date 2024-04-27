@@ -8,14 +8,19 @@ const bcrypt = require('bcrypt');
  */
 const comparePassword = async (password, hashedPassword) => {
     try {
+        console.log('Contraseña en texto plano:', password);
+        console.log('Hash de contraseña almacenado:', hashedPassword);
+
         // Compara la contraseña en texto plano con el hash de contraseña
         const match = await bcrypt.compare(password, hashedPassword);
+
         return match;
     } catch (error) {
         console.error('Error al comparar contraseñas:', error);
         throw new Error('Error al comparar contraseñas');
     }
 };
+
 
 /**
  * Genera un hash para una contraseña dada.

@@ -1,14 +1,17 @@
+// server.js
+
 const express = require('express');
 const app = express();
 const session = require('express-session');
-const path = require('path');
 const router = require('./routes/routes');
 const flash = require('connect-flash');
 const passport = require('passport');
+const path = require('path');
 const LocalStrategy = require('passport-local').Strategy;
 const passwordUtils = require('./database_connections/passwordUtils'); // Archivo contenedor de funciones para cifrado
 const usuarios = require('./database_connections/obtenerUsuario'); // Archivo contenedor de querys para MySQL
 const dotenv = require('dotenv');
+const cifradoMiddleware = require('./assets/cifradoMiddleware');
 
 // Configura DotEnv
 dotenv.config();
@@ -35,7 +38,7 @@ passport.use(new LocalStrategy(
       if (!user) {
         return done(null, false, { message: 'Usuario incorrecto.' });
       }
-      const passwordMatch = await passwordUtils.comparePassword(password, user.password_hash);
+      const passwordMatch = await passwordUtils.comparePassword(password, user.contrasenia_hash);
       if (!passwordMatch) {
         return done(null, false, { message: 'Contraseña incorrecta.' });
       }
@@ -64,21 +67,19 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Algo salió mal');
-});
-
+// Middleware para procesar archivos estáticos en la carpeta 'public'
+app.use(express.static('public'));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Configuración de la plantilla Pug
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
-// Middleware para procesar archivos estáticos en la carpeta 'public'
-app.use(express.static('public'));
-app.use(express.json());
+// Usar el middleware cifrado
+app.use('/cifrar', cifradoMiddleware);
 
+// Rutas de tu aplicación
 app.use('/', router);
 
 // Ruta para cerrar sesión
@@ -99,7 +100,7 @@ app.get('/logout', async (req, res) => {
   });
 });
 
-// Configurar la ruta para renderizar la vista
+// Ruta para renderizar la vista
 app.get('/', (req, res) => {
   res.render('index'); // Renderizar la vista index.pug
 });

@@ -20,7 +20,7 @@ const registrarUsuario = async (req, res) => {
 
         // Si el usuario se registró exitosamente, devolver una respuesta
         if (result) {
-            return res.redirect('/');
+            return res.redirect('/login');
         } else {
             return res.status(500).json({ message: 'No se pudo registrar al usuario' });
         }

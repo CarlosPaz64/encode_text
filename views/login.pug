@@ -1,0 +1,14 @@
+extends header
+
+block content
+  .login-container
+    h2 Iniciar Sesión
+    form(action="/login", method="POST")
+      .form-group
+        label(for="username") Usuario:
+        input(type="text", id="username", name="username", placeholder="Ingresa tu usuario", required)
+      .form-group
+        label(for="password") Contraseña:
+        input(type="password", id="password", name="password", placeholder="Ingresa tu contraseña", required)
+      button(type="submit") Iniciar Sesión
+    a(href="/registro") Registrarse

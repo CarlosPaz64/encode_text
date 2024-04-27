@@ -3,6 +3,8 @@ const path = require('path');
 const app = express();
 const routes = require('./routes/routes');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const session = require('express-session');
 
 // Servir archivos estáticos desde el directorio public
 app.use(express.static('public'));

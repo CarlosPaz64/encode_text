@@ -1,0 +1,14 @@
+extends header
+
+block content
+  main
+    .container
+      .content-box
+        h2 Texto Original
+        p#texto-original #{textoOriginal}
+
+      .content-box
+        h2 Texto Cifrado
+        p#texto-cifrado #{textoCifrado}
+
+      button(type="button" onclick="location.href='/ '") OK!

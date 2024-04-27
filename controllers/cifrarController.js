@@ -7,7 +7,7 @@ const cifrarBase = require('../encode/cifrarBase');
 
 function cifrarTexto(req, res) {
     console.log(req.body);
-    const texto = req.body['texto-a-cifrar'];
+    const textoOriginal = req.body['texto-a-cifrar']; // Obtén el texto original
     const clave = req.body['clave-cifrado'];
     const algoritmo = req.body['algoritmo'];
 
@@ -15,25 +15,26 @@ function cifrarTexto(req, res) {
 
     switch (algoritmo) {
         case 'cesar':
-            textoCifrado = cifrarCesar(texto, clave);
+            textoCifrado = cifrarCesar(textoOriginal, clave); // Usa el texto original para cifrar
             break;
         case 'sustitucion':
-            textoCifrado = cifrarSustitucion(texto, clave);
+            textoCifrado = cifrarSustitucion(textoOriginal, clave);
             break;
         case 'binario':
-            textoCifrado = cifrarBinario(texto, clave);
+            textoCifrado = cifrarBinario(textoOriginal, clave);
             break;
         case 'hexa':
-            textoCifrado = cifrarHexa(texto, clave);
+            textoCifrado = cifrarHexa(textoOriginal, clave);
             break;
         case 'base':
-            textoCifrado = cifrarBase(texto, clave);
+            textoCifrado = cifrarBase(textoOriginal, clave);
             break;
         default:
             return res.status(400).send('Algoritmo de cifrado no válido');
     }
 
-    res.render('cifrar', { textoCifrado });
+    // Renderiza la vista cifrar y pasa el texto original y el texto cifrado como variables
+    res.render('cifrar', { textoOriginal, textoCifrado });
 }
 
 module.exports = {

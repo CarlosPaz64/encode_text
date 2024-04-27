@@ -11,7 +11,7 @@ app.use((req, res, next) => {
   if (!req.session.loggedUser) {
     // Si el usuario no está logeado, verificamos si ha excedido el límite de acceso
     req.session.accessCount = req.session.accessCount || 0;
-    if (req.session.count >= 3) {
+    if (req.session.accessCount >= 3) {
       // Si ha excedido el límite, redirigir al usuario al login
       return res.redirect('/login');
     }

@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
 
   try {
     // Llamar al controlador para guardar el cifrado
-    await guardarCifradoController.guardarCifrado(textoOriginal, textoCifrado);
+    await guardarCifradoController.guardarCifradoSinUsuario(textoOriginal, textoCifrado);
 
     // Enviar una respuesta al cliente
     res.send('Cifrado guardado correctamente');

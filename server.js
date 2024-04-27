@@ -12,6 +12,12 @@ const passwordUtils = require('./database_connections/passwordUtils'); // Archiv
 const usuarios = require('./database_connections/obtenerUsuario'); // Archivo contenedor de querys para MySQL
 const dotenv = require('dotenv');
 const cifradoMiddleware = require('./assets/cifradoMiddleware');
+const bodyParser = require('body-parser');
+
+// Configura el middleware body-parser
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 
 // Configura DotEnv
 dotenv.config();

@@ -47,6 +47,7 @@ async function cifrarTexto(req, res) {
         res.render('cifrar', { textoOriginal, textoCifrado, clave, algoritmo });
     } catch (error) {
         console.error('Error al guardar el cifrado:', error);
+        console.log('Error al renderizar la vista:', error);
         res.status(500).send('Error interno al guardar el cifrado');
     }
 }

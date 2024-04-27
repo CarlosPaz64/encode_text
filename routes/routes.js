@@ -10,6 +10,11 @@ router.get('/registro', userController.mostrarFormularioRegistro);
 // Ruta para manejar la solicitud de registro (POST)
 router.post('/registro', userController.registrarUsuario);
 
+// Ruta para mostrar el formulario de cifrado (GET)
+router.get('/cifrar', (req, res) => {
+    res.render('cifrar'); // Renderiza el formulario de cifrado
+});
+
 // Ruta para cifrar texto (POST)
 router.post('/cifrar', cifrarController.cifrarTexto);
 

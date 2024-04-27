@@ -28,22 +28,4 @@ router.get('/login', (req, res) => {
     res.redirect('/');
   });
 
-// Middleware para verificar la autenticación del usuario
-function requireAuth(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next(); // Si el usuario está autenticado, continúa
-    } else {
-      res.redirect('/login'); // Si no está autenticado, redirige al inicio de sesión
-    }
-  }
-  
-  // Ruta para el index
-  router.get('/', requireAuth, (req, res) => {
-    // Obtener el número de créditos disponibles del usuario
-    const creditosDisponibles = req.user.creditos || 0; // Suponiendo que el número de créditos está almacenado en el objeto de usuario
-  
-    // Renderizar la vista de index con los créditos disponibles
-    res.render('index', { creditosDisponibles });
-  });
-
 module.exports = router;

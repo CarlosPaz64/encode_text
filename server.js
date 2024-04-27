@@ -1,45 +1,107 @@
 const express = require('express');
-const path = require('path');
 const app = express();
-const routes = require('./routes/routes');
-const bodyParser = require('body-parser');
-const passport = require('passport');
 const session = require('express-session');
-require('dotenv').config(); 
+const path = require('path');
+const router = require('./routes/routes');
+const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const passwordUtils = require('./database_connections/passwordUtils'); // Archivo contenedor de funciones para cifrado
+const usuarios = require('./database_connections/obtenerUsuario'); // Archivo contenedor de querys para MySQL
+const dotenv = require('dotenv');
 
-// Servir archivos estáticos desde el directorio public
-app.use(express.static('public'));
+// Configura DotEnv
+dotenv.config();
 
-// Middleware para analizar el cuerpo de la solicitud
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Verifica si SESSION_SECRET está definido en .env
-if (!process.env.SESSION_SECRET) {
-  console.error('ERROR: La variable de entorno SESSION_SECRET no está definida en el archivo .env');
-  process.exit(1);
-}
-
-// Configuración de sesión
+// Configurar middleware para manejar sesiones
 app.use(session({
-  secret: process.env.SESSION_SECRET, // Cambia esto por una cadena de caracteres aleatoria
+  secret: process.env.SESSION_SECRET, // Clave secreta para firmar la cookie de sesión
   resave: false,
   saveUninitialized: false
 }));
 
-// Inicialización de Passport
+// Configura connect-flash
+app.use(flash());
+
+// Configurar Passport.js
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Utilizar las rutas definidas en routes.js
-app.use('/', routes);
+// Configurar estrategia de autenticación local
+passport.use(new LocalStrategy(
+  async (username, password, done) => {
+    try {
+      const user = await usuarios.obtenerUsuarioPorUsername(username);
+      if (!user) {
+        return done(null, false, { message: 'Usuario incorrecto.' });
+      }
+      const passwordMatch = await passwordUtils.comparePassword(password, user.password_hash);
+      if (!passwordMatch) {
+        return done(null, false, { message: 'Contraseña incorrecta.' });
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  }
+));
 
-// Configurar el motor de plantillas Pug
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  await usuarios.obtenerPorId(id).then((user) => {
+    done(null, user);
+  }).catch((error) => {
+    done(error, null);
+  });
+});
+
+// Middleware para obtener los datos del usuario desde la sesión
+app.use((req, res, next) => {
+  res.locals.user = req.user || null;
+  next();
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Algo salió mal');
+});
+
+app.use(express.urlencoded({ extended: true }));
+
+// Configuración de la plantilla Pug
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
+// Middleware para procesar archivos estáticos en la carpeta 'public'
+app.use(express.static('public'));
+app.use(express.json());
+
+app.use('/', router);
+
+// Ruta para cerrar sesión
+app.get('/logout', async (req, res) => {
+  await req.logout(async (err) => {
+    if (err) {
+      console.error(err);
+    }
+    await req.session.destroy((err) => {
+      if (err) {
+        console.error('Error al destruir la sesión:', err);
+        return res.status(500).send('Error al cerrar sesión');
+      }
+      console.log('req.session.destroy finalizado correctamente');
+    });
+    res.clearCookie('token');
+    res.redirect('/'); // Redirigir a la página principal u otra página de tu elección
+  });
+});
+
 // Configurar la ruta para renderizar la vista
 app.get('/', (req, res) => {
-    res.render('index'); // Renderizar la vista index.pug
+  res.render('index'); // Renderizar la vista index.pug
 });
 
 // Puerto en el que escucha el servidor

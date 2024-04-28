@@ -50,24 +50,36 @@ async function cifrarTexto(req, res) {
 
     try {
         console.log("Guardando el cifrado en la base de datos...");
+        let resultado;
+        console.log(req.isAuthenticated);
+    
         if (!req.isAuthenticated()) {
-            await guardarCifradoController.guardarConversionSinUsuario(textoOriginal, textoCifrado, algoritmo);
+            resultado = await guardarCifradoController.guardarConversionSinUsuario(textoOriginal, textoCifrado, algoritmo);
         } else {
             const idUsuario = req.user.id;
-            await guardarCifradoController.guardarConversionConUsuario(idUsuario, textoOriginal, textoCifrado, algoritmo);
+            resultado = await guardarCifradoController.guardarConversionConUsuario(idUsuario, textoOriginal, textoCifrado, algoritmo);
         }
-        
-        console.log("Cifrado guardado correctamente.");
+    
+        // Llamada a las funciones UltimoRegistroSinUsuario y UltimoRegistroConUsuario si es necesario
+        const ultimoRegistroSinUsuario = await guardarCifradoController.UltimoRegistroSinUsuario();
+        const ultimoRegistroConUsuario = await guardarCifradoController.UltimoRegistroConUsuario();
+    
+        console.log("Resultado del guardado del cifrado:", resultado);
+        console.log("Último registro sin usuario:", ultimoRegistroSinUsuario);
+        console.log("Último registro con usuario:", ultimoRegistroConUsuario);
 
-        console.log("Renderizando la vista cifrar...");
-        res.render('cifrar', { textoOriginal, textoCifrado, clave, algoritmo });
+        if (resultado) {
+            res.render('cifrar', { textoOriginal, textoCifrado, clave, algoritmo, resultado });
+        } else {
+            console.error('Error al guardar el cifrado: No se obtuvo un resultado válido.');
+            res.status(500).send('Error interno al guardar el cifrado');
+        }
     } catch (error) {
         console.error('Error al guardar el cifrado:', error);
         console.log('Error al renderizar la vista:', error);
         res.status(500).send('Error interno al guardar el cifrado');
     }
 }
-
 
 module.exports = {
     cifrarTexto

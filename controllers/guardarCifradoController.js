@@ -1,5 +1,3 @@
-// guardarCifradoController.js
-
 // Llamada a los modelos y servicios necesarios.
 const ConversionSinUsuario = require('../database_connections/tablasCifrados').ConversionSinUsuario;
 const ConversionConUsuario = require('../database_connections/tablasCifrados').ConversionConUsuario;
@@ -19,6 +17,11 @@ guardarCifradoController.guardarConversionSinUsuario = async (textoOriginal, tex
     };
     const resultado = await ConversionSinUsuario.create(conversionData);
     console.log('Resultado de la operación de guardado (sin usuario):', resultado);
+
+    // Obtener el último registro de conversiones_sin_usuario
+    const ultimoRegistroSinUsuario = await ConversionSinUsuario.getLastRecord();
+    console.log('Último registro de conversiones_sin_usuario:', ultimoRegistroSinUsuario);
+
     return resultado;
   } catch (error) {
     console.error('Error al guardar la conversión sin usuario:', error);
@@ -38,6 +41,11 @@ guardarCifradoController.guardarConversionConUsuario = async (idUsuario, textoOr
     };
     const resultado = await ConversionConUsuario.create(conversionData);
     console.log('Resultado de la operación de guardado (con usuario):', resultado);
+
+    // Obtener el último registro de conversiones_con_usuario
+    const ultimoRegistroConUsuario = await ConversionConUsuario.getLastRecord();
+    console.log('Último registro de conversiones_con_usuario:', ultimoRegistroConUsuario);
+
     return resultado;
   } catch (error) {
     console.error('Error al guardar la conversión con usuario:', error);
@@ -45,4 +53,4 @@ guardarCifradoController.guardarConversionConUsuario = async (idUsuario, textoOr
   }
 };
 
-module.exports = guardarCifradoController;;
+module.exports = guardarCifradoController;

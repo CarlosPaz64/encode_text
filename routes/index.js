@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const cifrarController = require('../controllers/cifrarController');
+
 
 // Configurar la ruta para renderizar la vista
 app.get('/', (req, res) => {

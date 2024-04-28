@@ -42,7 +42,9 @@ app.use(passport.session());
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     try {
+      console.log('Intento de inicio de sesión con usuario:', username);
       const user = await usuarios.obtenerUsuarioPorUsername(username);
+      console.log('Usuario encontrado:', user);
       if (!user) {
         return done(null, false, { message: 'Usuario incorrecto.' });
       }
@@ -56,6 +58,7 @@ passport.use(new LocalStrategy(
 
       return done(null, user);
     } catch (err) {
+      console.error('Error al autenticar usuario:', err);
       return done(err);
     }
   }

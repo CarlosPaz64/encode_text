@@ -6,7 +6,7 @@ const cifrarController = require('../controllers/cifrarController');
 
 // Ruta para mostrar el formulario de cifrado (GET)
 router.get('/', (req, res) => {
-    res.render('cifrar'); // Renderiza el formulario de cifrado
+    res.render('cifrar');
 });
 
 // Ruta para cifrar texto (POST)

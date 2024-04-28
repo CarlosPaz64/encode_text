@@ -14,7 +14,8 @@ guardarCifradoController.guardarConversionSinUsuario = async (textoOriginal, tex
     const conversionData = {
       texto_por_convertir: textoOriginal,
       texto_criptado: textoCifrado,
-      algoritmo: algoritmo
+      algoritmo: algoritmo,
+      fecha_encode_sin_usuario: new Date() // Agregar la fecha actual aquí
     };
     const resultado = await ConversionSinUsuario.create(conversionData);
     console.log('Resultado de la operación de guardado (sin usuario):', resultado);
@@ -32,7 +33,8 @@ guardarCifradoController.guardarConversionConUsuario = async (idUsuario, textoOr
       id_usuario: idUsuario,
       texto_por_convertir_usuario: textoOriginal,
       texto_criptado_usuario: textoCifrado,
-      algoritmo: algoritmo
+      algoritmo: algoritmo,
+      fecha_encode_con_usuario: new Date() // Agregar la fecha actual aquí
     };
     const resultado = await ConversionConUsuario.create(conversionData);
     console.log('Resultado de la operación de guardado (con usuario):', resultado);

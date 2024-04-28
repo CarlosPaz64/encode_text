@@ -14,5 +14,7 @@ const pool = mysql.createPool({
     queueLimit: 0 // No hay límite para el número de conexiones en espera (0 significa ilimitado)
 });
 
+console.log('Conexión a la base de datos establecida correctamente');
+
 // Exportar el pool de conexiones para que pueda ser utilizado en otros módulos
 module.exports = pool.promise();

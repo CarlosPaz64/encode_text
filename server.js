@@ -1,42 +1,44 @@
 // server.js
-
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const router = require('./routes/routes');
 const flash = require('connect-flash');
 const passport = require('passport');
 const path = require('path');
 const LocalStrategy = require('passport-local').Strategy;
-const passwordUtils = require('./database_connections/passwordUtils'); // Archivo contenedor de funciones para cifrado
-const usuarios = require('./database_connections/obtenerUsuario'); // Archivo contenedor de querys para MySQL
+const passwordUtils = require('./database_connections/passwordUtils');
+const usuarios = require('./database_connections/obtenerUsuario');
 const dotenv = require('dotenv');
 const cifradoMiddleware = require('./assets/cifradoMiddleware');
 const bodyParser = require('body-parser');
+const authMiddleware = require('./assets/authMiddleware');
 
-// Configura el middleware body-parser
+// Configuración del middleware body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-// Configura DotEnv
+// Configuración de DotEnv
 dotenv.config();
 
-// Configurar middleware para manejar sesiones
+// Configuración del middleware para manejar sesiones
 app.use(session({
-  secret: process.env.SESSION_SECRET, // Clave secreta para firmar la cookie de sesión
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }));
 
-// Configura connect-flash
+// Configuración de cookie-parser
+app.use(cookieParser());
+
+// Configuración de connect-flash
 app.use(flash());
 
-// Configurar Passport.js
+// Configuración de Passport.js
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Configurar estrategia de autenticación local
 passport.use(new LocalStrategy(
   async (username, password, done) => {
     try {
@@ -48,6 +50,10 @@ passport.use(new LocalStrategy(
       if (!passwordMatch) {
         return done(null, false, { message: 'Contraseña incorrecta.' });
       }
+
+      // Registra el inicio de sesión cuando las credenciales son válidas
+      await authMiddleware.registrarLogin(user.id);
+
       return done(null, user);
     } catch (err) {
       return done(err);
@@ -82,36 +88,47 @@ app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
-// Usar el middleware cifrado
+// Uso del middleware cifrado
 app.use('/cifrar', cifradoMiddleware);
 
-// Rutas de tu aplicación
+// Rutas de la aplicación
+app.use('/logout', authMiddleware.authenticate, async (req, res, next) => {
+  try {
+    if (req.user && req.user.id) {
+      await authMiddleware.registrarLogout(req.user.id);
+    } else {
+      console.error('No se puede cerrar sesión: usuario no autenticado.');
+    }
+
+    await req.logout(async (err) => {
+      if (err) {
+        console.error(err);
+      }
+
+      await req.session.destroy((err) => {
+        if (err) {
+          console.error('Error al destruir la sesión:', err);
+          return res.status(500).send('Error al cerrar sesión');
+        }
+        console.log('req.session.destroy finalizado correctamente');
+      });
+
+      res.clearCookie('token');
+      res.redirect('/');
+    });
+  } catch (error) {
+    console.error('Error al cerrar sesión:', error);
+    res.status(500).send('Error al cerrar sesión');
+  }
+}, router);
+
+app.get('/', (req, res, next) => {
+  res.render('index');
+});
+
+// Llama a las rutas definidas en routes.js
 app.use('/', router);
 
-// Ruta para cerrar sesión
-app.get('/logout', async (req, res) => {
-  await req.logout(async (err) => {
-    if (err) {
-      console.error(err);
-    }
-    await req.session.destroy((err) => {
-      if (err) {
-        console.error('Error al destruir la sesión:', err);
-        return res.status(500).send('Error al cerrar sesión');
-      }
-      console.log('req.session.destroy finalizado correctamente');
-    });
-    res.clearCookie('token');
-    res.redirect('/'); // Redirigir a la página principal u otra página de tu elección
-  });
-});
-
-// Ruta para renderizar la vista
-app.get('/', (req, res) => {
-  res.render('index'); // Renderizar la vista index.pug
-});
-
-// Puerto en el que escucha el servidor
 const port = 3000;
 app.listen(port, () => {
   console.log(`Servidor iniciado en http://localhost:${port}`);

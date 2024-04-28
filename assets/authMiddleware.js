@@ -1,45 +1,58 @@
-// authMiddleware.js
 const jwt = require('jsonwebtoken');
-const passwordUtils = require('../database_connections/passwordUtils'); // Importa las funciones de passwordUtils.js
+const passwordUtils = require('../database_connections/passwordUtils');
 const dotenv = require('dotenv');
 const usuarios = require('../database_connections/obtenerUsuario');
+const { registrarInicioSesion, actualizarCierreSesion } = require('../database_connections/vecesUser');
 
-//Configura DotEnv
+// Configura DotEnv
 dotenv.config();
 
-async function authenticate(req, res, next) {
-    // Verifica si hay un token en las cookies de la solicitud
-    const token = req.cookies.token;
-
-    // Si no hay token, redirige al usuario al login
-    if (!token) {
-        return res.redirect('/login');
-    }
-
+// Función para registrar el inicio de sesión
+async function registrarLogin(idUsuario) {
     try {
-        // Verifica el token usando la clave secreta
+        await registrarInicioSesion(idUsuario, new Date());
+    } catch (error) {
+        console.error('Error al registrar el inicio de sesión:', error);
+        throw error;
+    }
+}
+
+// Función para registrar el cierre de sesión
+async function registrarLogout(idUsuario) {
+    try {
+        await actualizarCierreSesion(idUsuario, new Date());
+    } catch (error) {
+        console.error('Error al registrar el cierre de sesión:', error);
+        throw error;
+    }
+}
+
+// Middleware para autenticar
+async function authenticate(req, res, next) {
+    try {
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res.redirect('/login');
+        }
+
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-
-        // Almacena el ID del usuario en la solicitud para su posterior uso
         req.userId = decoded.userId;
-
         next();
-
-    } catch (err) {
-        // Si hay un error en la verificación del token, redirige al usuario al login
+    } catch (error) {
+        console.error('Error al autenticar:', error);
         return res.redirect('/login');
     }
 }
 
-// Función para generar un token JWT
+// Función para generar token
 function generateToken(userId) {
-    // Crea un token con el ID de usuario y una clave secreta
     return jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
 }
 
+// Función para autenticar usuario
 async function authenticateUser(username, password, done) {
     try {
-        // Obtener el usuario de la base de datos por nombre de usuario
         const user = await usuarios.obtenerUsuarioPorUsername(username);
         if (!user) {
             return done(null, false, { message: 'Usuario incorrecto.' });
@@ -49,13 +62,16 @@ async function authenticateUser(username, password, done) {
             return done(null, false, { message: 'Contraseña incorrecta.' });
         }
         return done(null, user);
-    } catch (err) {
-        return done(err);
+    } catch (error) {
+        console.error('Error al autenticar usuario:', error);
+        return done(error);
     }
 }
 
 module.exports = {
     authenticate,
     generateToken,
-    authenticateUser
+    authenticateUser,
+    registrarLogin,
+    registrarLogout
 };

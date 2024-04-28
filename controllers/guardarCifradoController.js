@@ -1,15 +1,15 @@
-// guardarCifradoController
+// guardarCifradoController.js
 
-// Llamada a los modelos  y servicios necesarios.
+// Llamada a los modelos y servicios necesarios.
 const ConversionSinUsuario = require('../database_connections/tablasCifrados').ConversionSinUsuario;
 const ConversionConUsuario = require('../database_connections/tablasCifrados').ConversionConUsuario;
 
 // Lógica para hacer el guardado si no hay usuario y si lo hay
 // Controlador para manejar las conversiones
-const conversionController = {};
+const guardarCifradoController = {};
 
 // Función para guardar una conversión sin usuario
-conversionController.guardarConversionSinUsuario = async (textoOriginal, textoCifrado, algoritmo) => {
+guardarCifradoController.guardarConversionSinUsuario = async (textoOriginal, textoCifrado, algoritmo) => {
   try {
     const conversionData = {
       texto_por_convertir: textoOriginal,
@@ -17,6 +17,7 @@ conversionController.guardarConversionSinUsuario = async (textoOriginal, textoCi
       algoritmo: algoritmo
     };
     const resultado = await ConversionSinUsuario.create(conversionData);
+    console.log('Resultado de la operación de guardado (sin usuario):', resultado);
     return resultado;
   } catch (error) {
     console.error('Error al guardar la conversión sin usuario:', error);
@@ -25,7 +26,7 @@ conversionController.guardarConversionSinUsuario = async (textoOriginal, textoCi
 };
 
 // Función para guardar una conversión con usuario
-conversionController.guardarConversionConUsuario = async (idUsuario, textoOriginal, textoCifrado, algoritmo) => {
+guardarCifradoController.guardarConversionConUsuario = async (idUsuario, textoOriginal, textoCifrado, algoritmo) => {
   try {
     const conversionData = {
       id_usuario: idUsuario,
@@ -34,6 +35,7 @@ conversionController.guardarConversionConUsuario = async (idUsuario, textoOrigin
       algoritmo: algoritmo
     };
     const resultado = await ConversionConUsuario.create(conversionData);
+    console.log('Resultado de la operación de guardado (con usuario):', resultado);
     return resultado;
   } catch (error) {
     console.error('Error al guardar la conversión con usuario:', error);
@@ -41,4 +43,4 @@ conversionController.guardarConversionConUsuario = async (idUsuario, textoOrigin
   }
 };
 
-module.exports = conversionController;
+module.exports = guardarCifradoController;;

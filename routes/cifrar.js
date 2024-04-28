@@ -2,22 +2,17 @@
 
 const express = require('express');
 const router = express.Router();
-const guardarCifradoController = require('../controllers/guardarCifradoController');
+const cifrarController = require('../controllers/cifrarController');
 
-// Ruta para guardar un cifrado
-router.post('/', async (req, res) => {
-  const { textoOriginal, textoCifrado } = req.body;
+// Ruta para mostrar el formulario de cifrado (GET)
+router.get('/', (req, res) => {
+    res.render('cifrar'); // Renderiza el formulario de cifrado
+});
 
-  try {
-    // Llamar al controlador para guardar el cifrado
-    await guardarCifradoController.guardarCifradoSinUsuario(textoOriginal, textoCifrado);
-
-    // Enviar una respuesta al cliente
-    res.send('Cifrado guardado correctamente');
-  } catch (error) {
-    console.error('Error al guardar el cifrado:', error);
-    res.status(500).send('Error al guardar el cifrado');
-  }
+// Ruta para cifrar texto (POST)
+router.post('/', (req, res) => {
+    console.log('Datos recibidos en /cifrar:', req.body);
+    cifrarController.cifrarTexto(req, res);
 });
 
 module.exports = router;

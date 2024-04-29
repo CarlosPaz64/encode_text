@@ -5,6 +5,9 @@ const cifrarSustitucion = require('../encode/cifrarSustitucion');
 const cifrarBinario = require('../encode/cifrarBinario');
 const cifrarHexa = require('../encode/cifrarHexa');
 const cifrarBase = require('../encode/cifrarBase');
+const ConversionSinUsuario = require('../database_connections/tablasCifrados').ConversionSinUsuario;
+const ConversionConUsuario = require('../database_connections/tablasCifrados').ConversionConUsuario;
+
 
 async function cifrarTexto(req, res) {
     console.log("Solicitud recibida para cifrar texto.");
@@ -51,18 +54,18 @@ async function cifrarTexto(req, res) {
     try {
         console.log("Guardando el cifrado en la base de datos...");
         let resultado;
-        console.log(req.isAuthenticated);
+        console.log(req.isAuthenticated());
     
         if (!req.isAuthenticated()) {
-            resultado = await guardarCifradoController.guardarConversionSinUsuario(textoOriginal, textoCifrado, algoritmo);
+            resultado = await guardarCifradoController.guardarConversionSinUsuario(req, textoOriginal, textoCifrado, algoritmo);
         } else {
             const idUsuario = req.user.id;
             resultado = await guardarCifradoController.guardarConversionConUsuario(idUsuario, textoOriginal, textoCifrado, algoritmo);
         }
     
         // Llamada a las funciones UltimoRegistroSinUsuario y UltimoRegistroConUsuario si es necesario
-        const ultimoRegistroSinUsuario = await guardarCifradoController.UltimoRegistroSinUsuario();
-        const ultimoRegistroConUsuario = await guardarCifradoController.UltimoRegistroConUsuario();
+        const ultimoRegistroSinUsuario = await ConversionSinUsuario.getLastRecord();
+        const ultimoRegistroConUsuario = await ConversionConUsuario.getLastRecord();
     
         console.log("Resultado del guardado del cifrado:", resultado);
         console.log("Último registro sin usuario:", ultimoRegistroSinUsuario);

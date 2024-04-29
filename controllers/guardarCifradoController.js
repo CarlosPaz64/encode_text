@@ -7,14 +7,20 @@ const ConversionConUsuario = require('../database_connections/tablasCifrados').C
 const guardarCifradoController = {};
 
 // Función para guardar una conversión sin usuario
-guardarCifradoController.guardarConversionSinUsuario = async (textoOriginal, textoCifrado, algoritmo) => {
+guardarCifradoController.guardarConversionSinUsuario = async (req, textoOriginal, textoCifrado, algoritmo) => {
   try {
+    // Verificar si hay un usuario autenticado
+    if (req.isAuthenticated()) {
+      throw new Error('No se puede guardar la conversión sin usuario porque hay un usuario autenticado.');
+    }
+
     const conversionData = {
       texto_por_convertir: textoOriginal,
       texto_criptado: textoCifrado,
       algoritmo: algoritmo,
       fecha_encode_sin_usuario: new Date() // Agregar la fecha actual aquí
     };
+    console.log(conversionData);
     const resultado = await ConversionSinUsuario.create(conversionData);
     console.log('Resultado de la operación de guardado (sin usuario):', resultado);
 

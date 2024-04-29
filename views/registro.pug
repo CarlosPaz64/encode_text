@@ -7,6 +7,9 @@ block content
     div.content
       div.right-side
         div.topic-text Registro de Usuario
+        if error
+          div.error-message
+            p= error
         p Por favor completa el siguiente formulario para registrarte.
         form(action="/registro", method="POST")
           .input-box.form-group

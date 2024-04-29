@@ -22,7 +22,9 @@ const registrarUsuario = async (req, res) => {
         if (result) {
             return res.redirect('/login');
         } else {
-            return res.status(500).json({ message: 'No se pudo registrar al usuario' });
+             // Si el registro no fue exitoso, redirige al usuario a la vista de registro con el mensaje de error
+            return res.redirect('/registro?error=' + encodeURIComponent('Ya hay un usuario registrado con ese username'));
+
         }
     } catch (error) {
         console.error('Error al registrar usuario:', error);

@@ -4,19 +4,19 @@ block content
   main
     div.container
       div.content
-        h2 Texto Original
-        p#texto-original #{textoOriginal}
+        div.right-side
+          div.topic-text Texto Original
+            div.input-box.message-box
+              textarea#texto-original= textoOriginal
 
-      .content-box
-        h2 Texto Cifrado
-        p#texto-cifrado #{textoCifrado}
+          div.topic-text Texto Cifrado
+            div.input-box.message-box
+              textarea#texto-cifrado= textoCifrado
 
-      .content-box
-        h2 Clave
-        p clave: #{clave}
+          div.topic-text Clave
+            p clave: #{clave}
 
-      .content-box
-        h2 Algoritmo
-        p algoritmo: #{algoritmo}
+          div.topic-text Algoritmo
+            p algoritmo: #{algoritmo}
 
-      button(type="button" onclick="location.href='/ '") OK!
+          button(type="button" onclick="location.href='/ '") OK!

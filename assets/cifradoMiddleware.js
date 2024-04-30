@@ -8,6 +8,9 @@ const formUsageCounter = (req, res, next) => {
         // Incrementa el contador
         req.session.formUsageCount++;
 
+        // Debugging
+        console.log("formUsageCount:", req.session.formUsageCount);
+
         // Verifica si el usuario ha excedido el límite de uso del formulario
         if (req.session.formUsageCount > 3) {
             // Redirige al usuario al login y muestra un mensaje modal

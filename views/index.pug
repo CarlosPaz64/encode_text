@@ -5,7 +5,10 @@ body
     div.content
       div.right-side
         div.topic-text Cifrado de textos en español
-        p Cifrado de textos en español. Solo tienes 3 intentos gratuitos. Después de usarlos tendrás que logearte para un acceso ilimitado.
+        if !user
+          p Cifrado de textos en español. Solo tienes #{3 - formUsageCount} intentos gratuitos. Después de usarlos tendrás que logearte para un acceso ilimitado.
+        else
+          p ¡Hola #{user.nombre} #{user.apellido_pat} alias #{user.username}! ¿Qué deseas encriptar hoy?
         form(action="/cifrar", method="post")
           div.input-box.message-box
             textarea(placeholder="Texto a cifrar...", required="", name="texto-a-cifrar", id="texto-a-cifrar")

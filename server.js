@@ -70,6 +70,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   await usuarios.obtenerPorId(id).then((user) => {
+    console.log('Usuario encontrado en deserializeUser:', user);
     done(null, user);
   }).catch((error) => {
     done(error, null);
@@ -77,8 +78,20 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // Middleware para obtener los datos del usuario desde la sesión
-app.use((req, res, next) => {
-  res.locals.user = req.user || null;
+app.use(async (req, res, next) => {
+  if (req.isAuthenticated()) {
+    try {
+      const user = await usuarios.obtenerUsuarioPorUsername(req.user.username);
+      res.locals.user = user || null;
+    } catch (error) {
+      console.error('Error al obtener el usuario:', error);
+      res.locals.user = null;
+    }
+  } else {
+    res.locals.user = null;
+  }
+  
+  res.locals.formUsageCount = req.session.formUsageCount || 0;
   next();
 });
 
@@ -126,7 +139,7 @@ app.use('/logout', authMiddleware.authenticate, async (req, res, next) => {
 }, router);
 
 app.get('/', (req, res, next) => {
-  res.render('index');
+  res.render('index', { user: res.locals.user, formUsageCount: res.locals.formUsageCount });
 });
 
 // Llama a las rutas definidas en routes.js

@@ -1,22 +1,24 @@
 extends header
 
 block content
-  main
+  body
     div.container
       div.content
         div.right-side
           div.topic-text Texto Original
             div.input-box.message-box
-              textarea#texto-original= textoOriginal
+              textarea#texto-original(name="texto-original" rows="4")= textoOriginal
 
           div.topic-text Texto Cifrado
             div.input-box.message-box
-              textarea#texto-cifrado= textoCifrado
+              textarea#texto-cifrado(name="texto-cifrado" rows="4")= textoCifrado
 
-          div.topic-text Clave
-            p clave: #{clave}
+          div.topic-text
+            label(for="clave") Clave
+            p.clave= clave
 
-          div.topic-text Algoritmo
-            p algoritmo: #{algoritmo}
+          div.topic-text
+            label(for="algoritmo") Algoritmo
+            p.algoritmo= algoritmo
 
           button(type="button" onclick="location.href='/ '") OK!

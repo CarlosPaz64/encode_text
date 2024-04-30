@@ -1,24 +1,27 @@
-include header
+extends header
 
-body
+block content
+  link(rel="stylesheet", href="/css/styles.css")
+
   div.container
     div.content
       div.right-side
-        div.topic-text Cifrado de textos en español
-        if !user
-          p Cifrado de textos en español. Solo tienes #{3 - parseInt(formUsageCount)} intentos gratuitos. Después de usarlos tendrás que logearte para un acceso ilimitado.
-        else
-          p ¡Hola #{nombre} #{apellidoPaterno} alias #{username}! ¿Qué deseas encriptar hoy?
-        form(action="/cifrar", method="post")
-          div.input-box.message-box
-            textarea(placeholder="Texto a cifrar...", required="", name="texto-a-cifrar", id="texto-a-cifrar")
-          div.input-box
-            input(type="text", name="clave-cifrado", id="clave-cifrado", required="", placeholder="Ingresa la clave de cifrado")
-          div.input-box
-            select(name="algoritmo", id="")
-              option(value="cesar") Código César
-              option(value="sustitucion") Sustitución
-              option(value="base") Base 64
-              option(value="hexa") Hexadecimal
-              option(value="binario") Binario
-          button(type="submit", id="submit-btn") Convertir
+        div.topic-text Registro de Usuario
+        if error
+          div.error-message
+            p= error
+        p Por favor completa el siguiente formulario para registrarte.
+        form(action="/registro", method="POST")
+          .input-box.form-group
+            input(type="text", id="nombre", name="nombre", placeholder="Ingresa tu nombre", required)
+          .input-box.form-group
+            input(type="text", id="apellido-paterno", name="apellidoPaterno", placeholder="Ingresa tu apellido paterno", required)
+          .input-box.form-group
+            input(type="text", id="apellido-materno", name="apellidoMaterno", placeholder="Ingresa tu apellido materno")
+          .input-box.form-group
+            input(type="text", id="usuario", name="usuario", placeholder="Ingresa tu usuario", required)
+          .input-box.form-group
+            input(type="email", id="correo", name="correo", placeholder="Ingresa tu correo electrónico", required)
+          .input-box.form-group
+            input(type="password", id="password", name="contraseña", placeholder="Ingresa tu contraseña", required)
+          button.submit-btn(type="submit") Registrarse

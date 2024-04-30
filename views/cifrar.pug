@@ -7,11 +7,11 @@ block content
         div.right-side
           div.topic-text Texto Original
             div.input-box.message-box
-              textarea#texto-original(name="texto-original" rows="4")= textoOriginal
+              textarea#texto-original(name="texto-original" rows="4" readonly)= textoOriginal
 
           div.topic-text Texto Cifrado
             div.input-box.message-box
-              textarea#texto-cifrado(name="texto-cifrado" rows="4")= textoCifrado
+              textarea#texto-cifrado(name="texto-cifrado" rows="4" readonly)= textoCifrado
             button#copy-button(type="button")
                 i.fas.fa-copy
                 span#copy-status(style="margin-left: 5px; color: green;")

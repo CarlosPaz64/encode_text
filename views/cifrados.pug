@@ -1,0 +1,33 @@
+extends header
+
+block content
+  body
+    div.container
+      each conversion in conversiones
+        div.content
+          div.right-side
+            div.topic-text Texto Original
+            p= conversion.fecha_encode_con_usuario
+              div.input-box.message-box
+                textarea(name="texto-original" rows="4" readonly)= conversion.texto_por_convertir_usuario
+
+            div.topic-text Texto Cifrado
+              div.input-box.message-box
+                textarea(name="texto-cifrado" rows="4" readonly)= conversion.texto_criptado_usuario
+              button(type="button" onclick="copyText(this)")
+                i.fas.fa-copy
+                span.copy-status(style="margin-left: 5px; color: green;")
+
+
+  script.
+    function copyText(button) {
+      const textoCifradoTextarea = button.parentElement.querySelector('textarea[name="texto-cifrado"]');
+      textoCifradoTextarea.select();
+      document.execCommand('copy');
+      window.getSelection().removeAllRanges();
+      const copyStatus = button.parentElement.querySelector('.copy-status');
+      copyStatus.innerHTML = '<i class="fas fa-check-circle"></i>';
+      setTimeout(() => {
+        copyStatus.innerHTML = '';
+      }, 2000);
+    }

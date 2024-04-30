@@ -14,6 +14,7 @@ const dotenv = require('dotenv');
 const cifradoMiddleware = require('./assets/cifradoMiddleware');
 const bodyParser = require('body-parser');
 const authMiddleware = require('./assets/authMiddleware');
+const conversionesModel = require('./models/conversionesModel');
 
 // Configuración del middleware body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -144,6 +145,23 @@ app.get('/', (req, res, next) => {
 
 // Llama a las rutas definidas en routes.js
 app.use('/', router);
+
+// Ruta para obtener conversiones por ID de usuario
+app.get('/cifrados/:idUsuario', async (req, res, next) => {
+  const idUsuario = req.params.idUsuario;
+  try {
+    // Obtener las conversiones por ID de usuario
+    console.log('ID de usuario:', idUsuario); // Agregado para depuración
+    const conversiones = await conversionesModel.obtenerConversionesConUsuarioPorId(idUsuario);
+    console.log('Conversiones encontradas:', conversiones); // Agregado para depuración
+    console.log('Conversiones pasadas a la vista:', conversiones);
+    res.render('cifrados', { conversiones }); // Renderizar la plantilla y pasar las conversiones como datos
+  } catch (error) {
+    console.error('Error al obtener las conversiones con usuario por ID:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
 
 const port = 3000;
 app.listen(port, () => {

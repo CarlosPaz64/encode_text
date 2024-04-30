@@ -141,10 +141,7 @@ body {
   margin: 12px 0;
 }
 
-.right-side .input-box input,
-.right-side .input-box textarea,
-.right-side .input-box option,
-.right-side .input-box select {
+.right-side .input-box input, .right-side .input-box textarea, .right-side .input-box option, .right-side .input-box select {
   height: 100%;
   width: 100%;
   border: none;

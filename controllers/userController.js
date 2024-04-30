@@ -23,24 +23,29 @@ const registrarUsuario = async (req, res) => {
             return res.redirect('/login');
         } else {
              // Si el registro no fue exitoso, redirige al usuario a la vista de registro con el mensaje de error
-            return res.redirect('/registro?error=' + encodeURIComponent('Ya hay un usuario registrado con ese username'));
+             req.session.error = 'Ya hay un usuario registrado con ese username';
+             return res.redirect('/registro');
 
         }
     } catch (error) {
         console.error('Error al registrar usuario:', error);
-        return res.status(500).json({ message: 'Error interno del servidor' });
+        req.session.error = 'Error interno del servidor';
+        return res.redirect('/registro');
     }
 };
 
 // Controlador para mostrar el formulario de registro
 const mostrarFormularioRegistro = (req, res) => {
     try {
-        res.render('registro'); // Renderizar la vista de registro (registro.pug)
+        const error = req.session.error; // Obtener el error de la sesión
+        delete req.session.error; // Eliminar el error de la sesión después de obtenerlo
+        res.render('registro', { error }); // Pasar el error a la vista de registro (registro.pug)
     } catch (error) {
         console.error('Error al mostrar el formulario de registro:', error);
         return res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
+
 
 
 module.exports = { registrarUsuario, mostrarFormularioRegistro };

@@ -25,3 +25,14 @@ block content
           .input-box.form-group
             input(type="password", id="password", name="contraseña", placeholder="Ingresa tu contraseña", required)
           button.submit-btn(type="submit") Registrarse
+
+      script.
+        document.addEventListener('DOMContentLoaded', function() {
+          const errorMessage = document.querySelector('.error-message');
+
+          if (errorMessage) {
+            setTimeout(() => {
+              errorMessage.style.display = 'none';
+            }, 5000);
+          }
+        });

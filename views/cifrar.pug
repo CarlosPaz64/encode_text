@@ -12,13 +12,25 @@ block content
           div.topic-text Texto Cifrado
             div.input-box.message-box
               textarea#texto-cifrado(name="texto-cifrado" rows="4")= textoCifrado
-
-          div.topic-text
-            label(for="clave") Clave
-            p.clave= clave
-
-          div.topic-text
-            label(for="algoritmo") Algoritmo
-            p.algoritmo= algoritmo
+            button#copy-button(type="button")
+                i.fas.fa-copy
+                span#copy-status(style="margin-left: 5px; color: green;")
 
           button(type="button" onclick="location.href='/ '") OK!
+
+      script.
+        document.addEventListener('DOMContentLoaded', function() {
+          const copyButton = document.getElementById('copy-button');
+          const textoCifradoTextarea = document.getElementById('texto-cifrado');
+
+          copyButton.addEventListener('click', function() {
+            textoCifradoTextarea.select();
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            const copyStatus = document.getElementById('copy-status');
+            copyStatus.innerHTML = '<i class="fas fa-check-circle"></i>';
+            setTimeout(() => {
+              copyStatus.innerHTML = '';
+            }, 2000);
+          });
+        });

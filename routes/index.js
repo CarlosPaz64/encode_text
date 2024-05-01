@@ -5,7 +5,7 @@ const cifradoMiddleware = require('../assets/cifradoMiddleware'); // Asegúrate 
 
 // Configurar la ruta para renderizar la vista
 app.get('/', cifradoMiddleware, (req, res, next) => {
-  res.render('index');
+  res.render('index', { error: req.flash('error'), user: res.locals.user, formUsageCount: res.locals.formUsageCount });
 });
 
 

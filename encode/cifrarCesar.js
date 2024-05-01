@@ -4,6 +4,9 @@ function cifrarCesar(texto, clave) {
     // Convertir el texto a minúsculas para simplificar el cifrado
     texto = texto.toLowerCase();
 
+    // Convertir la clave a un número entero
+    clave = parseInt(clave);
+
     let textoCifrado = '';
 
     console.log("Texto original:", texto);
@@ -45,6 +48,3 @@ function cifrarCesar(texto, clave) {
 }
 
 module.exports = cifrarCesar;
-
-// Ejemplo de uso
-console.log(cifrarCesar('Hola mundo', 0)); // Debería imprimir 'hola mundo'

@@ -1,14 +1,20 @@
-const crypto = require('crypto');
+// Función para cifrar el texto original a binario
+function cifrarBinario(textoOriginal) {
+    let textoBinario = '';
 
-// Función para cifrar a binario con una clave
-function cifrarABinarioConClave(texto, clave) {
-    const algoritmo = 'sha256'; // Algoritmo hash para HMAC
-    const hmac = crypto.createHmac(algoritmo, clave); // Crear instancia de HMAC con la clave
+    // Iterar sobre cada carácter del texto original
+    for (let i = 0; i < textoOriginal.length; i++) {
+        // Obtener el valor ASCII del carácter
+        const valorAscii = textoOriginal.charCodeAt(i);
+        
+        // Convertir el valor ASCII a su representación binaria de 8 bits
+        const binario = valorAscii.toString(2).padStart(8, '0');
+        
+        // Agregar la representación binaria al texto binario resultante
+        textoBinario += binario;
+    }
 
-    // Calcular el hash HMAC del texto utilizando la clave
-    const hash = hmac.update(texto).digest('binary');
-
-    return hash;
+    return textoBinario;
 }
 
-module.exports = cifrarABinarioConClave;
+module.exports = cifrarBinario;

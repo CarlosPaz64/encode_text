@@ -140,7 +140,7 @@ app.use('/logout', authMiddleware.authenticate, async (req, res, next) => {
 }, router);
 
 app.get('/', (req, res, next) => {
-  res.render('index', { user: res.locals.user, formUsageCount: res.locals.formUsageCount });
+  res.render('index', { user: res.locals.user, formUsageCount: res.locals.formUsageCount, error: req.flash('error') });
 });
 
 // Llama a las rutas definidas en routes.js

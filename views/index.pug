@@ -5,20 +5,56 @@ body
     div.content
       div.right-side
         div.topic-text Cifrado de textos en español
+        if error
+          div.error-message
+            p= error
         if !user
           p Cifrado de textos en español. Solo tienes #{3 - formUsageCount} intentos gratuitos. Después de usarlos tendrás que logearte para un acceso ilimitado.
         else
           p ¡Hola #{user.nombre} #{user.apellido_pat} alias #{user.username}! ¿Qué deseas encriptar hoy?
-        form(action="/cifrar", method="post")
+        form(action="/cifrar", method="post", onsubmit="return validarTexto()")
           div.input-box.message-box
-            textarea(placeholder="Texto a cifrar...", required="", name="texto-a-cifrar", id="texto-a-cifrar")
+            textarea(placeholder="Texto a cifrar...", name="texto-a-cifrar", id="texto-a-cifrar", required="")
+            if error && error === 'El campo de texto no puede estar vacío'
+              div.error-message
+                p= error
           div.input-box
-            input(type="number", name="clave-cifrado", id="clave-cifrado", required="", placeholder="Ingresa la clave de cifrado")
+            input(type="number", name="clave-cifrado", id="clave-cifrado", placeholder="Ingresa la clave de cifrado", min="0", max="27")
           div.input-box
-            select(name="algoritmo", id="")
+            select(name="algoritmo", id="algoritmo")
               option(value="cesar") Código César
               option(value="sustitucion") Sustitución
               option(value="base") Base 64
               option(value="hexa") Hexadecimal
               option(value="binario") Binario
-          button(type="submit", id="submit-btn") Convertir
+          button(type="submit", id="submit-btn", onclick="return validarTexto()") Convertir
+
+script.
+  const claveCifradoInput = document.getElementById('clave-cifrado');
+  const algoritmoSelect = document.getElementById('algoritmo');
+
+  algoritmoSelect.addEventListener('change', function() {
+    const selectedAlgorithm = algoritmoSelect.value;
+    if (selectedAlgorithm === 'cesar' || selectedAlgorithm === 'sustitucion') {
+      claveCifradoInput.style.display = 'block';
+      claveCifradoInput.setAttribute('required', 'true');
+      claveCifradoInput.setAttribute('max', selectedAlgorithm === 'cesar' ? '26' : '9');
+    } else {
+      claveCifradoInput.style.display = 'none';
+      claveCifradoInput.removeAttribute('required');
+    }
+  });
+
+  function validarTexto() {
+    var textoCifrar = document.getElementById('texto-a-cifrar').value.trim();
+    var algoritmoSeleccionado = document.getElementById('algoritmo').value;
+    if (textoCifrar === '') {
+      document.querySelector('.error-message').textContent = 'El campo de texto no puede estar vacío';
+      return false;
+    }
+    if ((algoritmoSeleccionado === 'cesar' || algoritmoSeleccionado === 'sustitucion') && claveCifradoInput.value.trim() === '') {
+      document.querySelector('.error-message').textContent = 'Ingresa la clave de cifrado';
+      return false;
+    }
+    return true;
+  }

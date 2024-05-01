@@ -4,7 +4,7 @@ const cifrarCesar = require('../encode/cifrarCesar');
 const cifrarSustitucion = require('../encode/cifrarSustitucion');
 const cifrarBinario = require('../encode/cifrarBinario');
 const cifrarHexa = require('../encode/cifrarHexa');
-const cifrarBase = require('../encode/cifrarBase');
+const cifrarBase64 = require('../encode/cifrarBase');
 const ConversionSinUsuario = require('../database_connections/tablasCifrados').ConversionSinUsuario;
 const ConversionConUsuario = require('../database_connections/tablasCifrados').ConversionConUsuario;
 
@@ -14,35 +14,34 @@ async function cifrarTexto(req, res) {
     console.log("Datos del formulario recibidos:", req.body);
 
     const textoOriginal = req.body['texto-a-cifrar'];
-    const clave = req.body['clave-cifrado'];
     const algoritmo = req.body['algoritmo'];
+    let textoCifrado;
 
     console.log("Texto original:", textoOriginal);
-    console.log("Clave de cifrado:", clave);
     console.log("Algoritmo de cifrado:", algoritmo);
-
-    let textoCifrado;
 
     switch (algoritmo) {
         case 'cesar':
+            const claveCesar = parseInt(req.body['clave-cifrado']); // Convertir la clave a número entero
             console.log("Cifrando texto utilizando el algoritmo César...");
-            textoCifrado = cifrarCesar(textoOriginal, clave);
+            textoCifrado = cifrarCesar(textoOriginal, claveCesar);
             break;
         case 'sustitucion':
+            const claveSustitucion = req.body['clave-cifrado']; // La clave de sustitución es un string
             console.log("Cifrando texto utilizando el algoritmo de sustitución...");
-            textoCifrado = cifrarSustitucion(textoOriginal, clave);
+            textoCifrado = cifrarSustitucion(textoOriginal, claveSustitucion);
             break;
         case 'binario':
             console.log("Cifrando texto utilizando el algoritmo binario...");
-            textoCifrado = cifrarBinario(textoOriginal, clave);
+            textoCifrado = cifrarBinario(textoOriginal);
             break;
         case 'hexa':
             console.log("Cifrando texto utilizando el algoritmo hexadecimal...");
-            textoCifrado = cifrarHexa(textoOriginal, clave);
+            textoCifrado = cifrarHexa(textoOriginal);
             break;
         case 'base':
             console.log("Cifrando texto utilizando el algoritmo Base64...");
-            textoCifrado = cifrarBase(textoOriginal, clave);
+            textoCifrado = cifrarBase64(textoOriginal);
             break;
         default:
             console.error("Algoritmo de cifrado no válido:", algoritmo);
@@ -72,7 +71,7 @@ async function cifrarTexto(req, res) {
         console.log("Último registro con usuario:", ultimoRegistroConUsuario);
 
         if (resultado) {
-            res.render('cifrar', { textoOriginal, textoCifrado, clave, algoritmo, resultado });
+            res.render('cifrar', { textoOriginal, textoCifrado, algoritmo, resultado });
         } else {
             console.error('Error al guardar el cifrado: No se obtuvo un resultado válido.');
             res.status(500).send('Error interno al guardar el cifrado');

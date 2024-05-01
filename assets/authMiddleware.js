@@ -33,6 +33,7 @@ async function authenticate(req, res, next) {
         const token = req.cookies.token;
 
         if (!token) {
+            req.flash('error', 'Token no encontrado.');
             return res.redirect('/login');
         }
 
@@ -41,7 +42,8 @@ async function authenticate(req, res, next) {
         next();
     } catch (error) {
         console.error('Error al autenticar:', error);
-        return res.redirect('/login');
+        req.flash('error', 'Error de autenticación.');
+        return res.redirect('/login', { title: 'Iniciar sesión', user: null, error: error.message });
     }
 }
 

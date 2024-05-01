@@ -147,7 +147,7 @@ app.get('/', (req, res, next) => {
 app.use('/', router);
 
 // Ruta para obtener conversiones por ID de usuario
-app.get('/cifrados/:idUsuario', async (req, res, next) => {
+app.get('/cifrados/:idUsuario', authMiddleware.authenticate, async (req, res, next) => {
   const idUsuario = req.params.idUsuario;
   try {
     // Obtener las conversiones por ID de usuario

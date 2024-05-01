@@ -5,8 +5,10 @@ const authMiddleware = require('../assets/authMiddleware');
 
 // Ruta para mostrar el formulario de inicio de sesión (GET)
 router.get('/', (req, res) => {
-  res.render('login', { title: 'Iniciar sesión', user: req.user ? req.user.nombre : '' });
+  const error = req.flash('error'); // Obtener el mensaje de error
+  res.render('login', { title: 'Iniciar sesión', user: req.user ? req.user.nombre : '', error }); // Pasar el mensaje de error a la vista
 });
+
 
 // Ruta para manejar el inicio de sesión (POST)
 router.post('/', passport.authenticate('local', {

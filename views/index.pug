@@ -14,7 +14,7 @@ body
           p ¡Hola #{user.nombre} #{user.apellido_pat} alias #{user.username}! ¿Qué deseas encriptar hoy?
         form(action="/cifrar", method="post", onsubmit="return validarTexto()")
           div.input-box.message-box
-            textarea(placeholder="Texto a cifrar...", name="texto-a-cifrar", id="texto-a-cifrar", required="")
+            textarea(placeholder="Texto a cifrar...", name="texto-a-cifrar", id="texto-a-cifrar", required="", maxlength="5000")
             if error && error === 'El campo de texto no puede estar vacío'
               div.error-message
                 p= error

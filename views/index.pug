@@ -46,12 +46,7 @@ script.
   });
 
   function validarTexto() {
-    var textoCifrar = document.getElementById('texto-a-cifrar').value.trim();
     var algoritmoSeleccionado = document.getElementById('algoritmo').value;
-    if (textoCifrar === '') {
-      document.querySelector('.error-message').textContent = 'El campo de texto no puede estar vacío';
-      return false;
-    }
     if ((algoritmoSeleccionado === 'cesar' || algoritmoSeleccionado === 'sustitucion') && claveCifradoInput.value.trim() === '') {
       document.querySelector('.error-message').textContent = 'Ingresa la clave de cifrado';
       return false;

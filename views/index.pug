@@ -38,7 +38,7 @@ script.
     if (selectedAlgorithm === 'cesar' || selectedAlgorithm === 'sustitucion') {
       claveCifradoInput.style.display = 'block';
       claveCifradoInput.setAttribute('required', 'true');
-      claveCifradoInput.setAttribute('max', selectedAlgorithm === 'cesar' ? '26' : '9');
+      claveCifradoInput.setAttribute('max', selectedAlgorithm === 'cesar' ? '26' : '26');
     } else {
       claveCifradoInput.style.display = 'none';
       claveCifradoInput.removeAttribute('required');

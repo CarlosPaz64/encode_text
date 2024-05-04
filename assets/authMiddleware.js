@@ -82,8 +82,6 @@ async function authenticate(req, res, next) {
 }
 
 
-
-
 // Función para autenticar usuario
 async function authenticateUser(username, password, done) {
     try {
@@ -102,10 +100,34 @@ async function authenticateUser(username, password, done) {
     }
 }
 
+async function autenticarCifrados(req, res, next) {
+    try {
+        // Verifica si hay un token en las cookies de la solicitud
+        const token = req.cookies.token;
+
+        // Si no hay token, redirige al usuario al inicio de sesión
+        if (!token) {
+            return res.redirect('/login');
+        }
+
+        // Verifica el token usando la clave secreta
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        
+        // Si el token es válido, permite que la solicitud continúe
+        next();
+
+    } catch (err) {
+        // Si hay un error al verificar el token, redirige al usuario al inicio de sesión
+        return res.redirect('/login');
+    }
+}
+
+
 module.exports = {
     authenticate,
     generateToken,
     authenticateUser,
     registrarLogin,
-    registrarLogout
+    registrarLogout,
+    autenticarCifrados
 };

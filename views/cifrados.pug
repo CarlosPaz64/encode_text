@@ -2,12 +2,14 @@ extends header
 
 block content
   body
+  div.topic-text Historial de cifrados
   each conversion in conversiones
     div.container
         div.content
           div.right-side
             div.topic-text Texto Original
             p= conversion.fecha_encode_con_usuario
+            p= conversion.algoritmo
               div.input-box.message-box
                 textarea(name="texto-original" rows="4" readonly)= conversion.texto_por_convertir_usuario
 
@@ -17,6 +19,7 @@ block content
               button(type="button" onclick="copyText(this)")
                 i.fas.fa-copy
                 span.copy-status(style="margin-left: 5px; color: green;")
+            
 
 
   script.

@@ -27,7 +27,8 @@ dotenv.config();
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  maxAge: 3600 * 1000 // 1 hora en milisegundos
 }));
 
 // Configuración de cookie-parser
@@ -39,6 +40,7 @@ app.use(flash());
 // Configuración de Passport.js
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 passport.use(new LocalStrategy(
   async (username, password, done) => {
@@ -140,7 +142,8 @@ app.use('/logout', authMiddleware.authenticate, async (req, res, next) => {
 }, router);
 
 app.get('/', (req, res, next) => {
-  res.render('index', { user: res.locals.user, formUsageCount: res.locals.formUsageCount, error: req.flash('error') });
+  res.render('index', { user: res.locals.user, formUsageCount: res.locals.formUsageCount, error: req.flash('error')
+   });
 });
 
 // Llama a las rutas definidas en routes.js
@@ -161,7 +164,6 @@ app.get('/cifrados/:idUsuario', authMiddleware.authenticate, async (req, res, ne
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
-
 
 const port = 3000;
 app.listen(port, () => {

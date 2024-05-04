@@ -59,7 +59,7 @@ async function cifrarTexto(req, res) {
             resultado = await guardarCifradoController.guardarConversionSinUsuario(req, textoOriginal, textoCifrado, algoritmo);
         } else {
             const idUsuario = req.user.id;
-            resultado = await guardarCifradoController.guardarConversionConUsuario(idUsuario, textoOriginal, textoCifrado, algoritmo);
+            resultado = await guardarCifradoController.guardarConversionConUsuario(req, idUsuario, textoOriginal, textoCifrado, algoritmo);
         }
     
         // Llamada a las funciones UltimoRegistroSinUsuario y UltimoRegistroConUsuario si es necesario

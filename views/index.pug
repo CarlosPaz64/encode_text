@@ -15,9 +15,6 @@ body
         form(action="/cifrar", method="post", onsubmit="return validarTexto()")
           div.input-box.message-box
             textarea(placeholder="Texto a cifrar...", name="texto-a-cifrar", id="texto-a-cifrar", required="", maxlength="5000")
-            if error && error === 'El campo de texto no puede estar vacío'
-              div.error-message
-                p= error
           div.input-box
             select(name="algoritmo", id="algoritmo")
               option(value="cesar") Código César

@@ -26,19 +26,53 @@ async function registrarLogout(idUsuario) {
         throw error;
     }
 }
+// Función para generar un token con un tiempo de vida definido
+function generateToken(userId) {
+    // Define el tiempo de vida del token (en segundos)
+    const expiresIn = 36000; // 1 hora
 
-// Middleware para autenticar
+    // Genera el token con el tiempo de vida especificado
+    const token = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn });
+    console.log('Token generado:', token);
+    console.log('Expires in:', expiresIn, 'seconds'); // Agregar el console.log para mostrar el tiempo de vida
+    return token;
+}
+
 async function authenticate(req, res, next) {
     try {
         const token = req.cookies.token;
+        console.log('Token recibido:', token);
 
-        if (!token) {
-            req.flash('error', 'Token no encontrado.');
-            return res.redirect('/login');
+        // Verifica si el usuario está autenticado antes de verificar el token
+        if (req.isAuthenticated()) {
+            let decoded;
+            try {
+                decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+            } catch (err) {
+                if (err.name === 'TokenExpiredError') {
+                    console.log('La sesión ha caducado.');
+                    req.flash('expiredTokenMessage', 'La sesión ha caducado.');
+
+                    // Destruir la sesión
+                    await req.session.destroy();
+
+                    // Limpiar la cookie
+                    res.clearCookie('token');
+
+                    // Redirigir al index normal
+                    return res.redirect('/');
+                } else {
+                    console.error('Error al verificar el token:', err);
+                    req.flash('error', 'El token es inválido. Por favor, inicia sesión nuevamente.');
+                    return res.redirect('/login');
+                }
+            }
+
+            console.log('Token verificado correctamente. ID de usuario:', decoded.userId);
+            req.userId = decoded.userId;
         }
 
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        req.userId = decoded.userId;
+        // Si el usuario no está autenticado, continúa sin verificar el token
         next();
     } catch (error) {
         console.error('Error al autenticar:', error);
@@ -47,10 +81,8 @@ async function authenticate(req, res, next) {
     }
 }
 
-// Función para generar token
-function generateToken(userId) {
-    return jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
-}
+
+
 
 // Función para autenticar usuario
 async function authenticateUser(username, password, done) {

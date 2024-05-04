@@ -37,7 +37,7 @@ guardarCifradoController.guardarConversionSinUsuario = async (req, textoOriginal
 };
 
 // Función para guardar una conversión con usuario
-guardarCifradoController.guardarConversionConUsuario = async (idUsuario, textoOriginal, textoCifrado, algoritmo) => {
+guardarCifradoController.guardarConversionConUsuario = async (req, idUsuario, textoOriginal, textoCifrado, algoritmo) => {
   try {
     const conversionData = {
       id_usuario: idUsuario,

@@ -29,7 +29,7 @@ async function registrarLogout(idUsuario) {
 // Función para generar un token con un tiempo de vida definido
 function generateToken(userId) {
     // Define el tiempo de vida del token (en segundos)
-    const expiresIn = 36000; // 1 hora
+    const expiresIn = 3600; // 1 hora (en segundos :D)
 
     // Genera el token con el tiempo de vida especificado
     const token = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn });
@@ -107,7 +107,7 @@ async function autenticarCifrados(req, res, next) {
 
         // Si no hay token, redirige al usuario al inicio de sesión
         if (!token) {
-            return res.redirect('/login');
+            return res.redirect('/');
         }
 
         // Verifica el token usando la clave secreta
@@ -118,7 +118,7 @@ async function autenticarCifrados(req, res, next) {
 
     } catch (err) {
         // Si hay un error al verificar el token, redirige al usuario al inicio de sesión
-        return res.redirect('/login');
+        return res.redirect('/');
     }
 }
 

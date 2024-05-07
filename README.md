@@ -19,9 +19,17 @@ El proyecto se trata de un cifrador de textos a diferentes tipos de cifrados. Pa
   "sass": "1.75.0"
 }
 ```
-Así mismo el proyecto utiliza scripts para optimizar tareas:
+Así mismo el proyecto utilizan los siguientes scripts para optimizar tareas:
+```
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile-sass": "sass styles/sass/styles.sass:public/css/styles.css",
+    "start": "npm run compile-sass && nodemon server.js"
+  },
+```
 + `compile-sass`: Este script compila los archivos Sass ubicados en styles/sass/styles.sass y genera un archivo CSS en public/css/styles.css.
 + `start`: Este script primero ejecuta npm run compile-sass para compilar los estilos Sass a CSS y luego inicia el servidor utilizando nodemon server.js.
++ Para compilar el proyecto coloca dentro del apartado de `scripts` esas líneas y dentro de la terminal escribe `npm start`.
 ## Se maneja el siguiente esquema de base de datos en MySQL Workbench:
 ```
 CREATE DATABASE encode_text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

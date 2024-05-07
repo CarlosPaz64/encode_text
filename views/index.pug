@@ -8,7 +8,10 @@ body
         if error
           div.error-message
             p= error
-        if !user
+        if formUsageCount > 3
+          div.error-message
+            p Ya no te quedan más intentos. Inicia sesión para continuar.
+        else if !user
           p Cifrado de textos en español. Solo tienes #{3 - formUsageCount} intentos gratuitos. Después de usarlos tendrás que logearte para un acceso ilimitado.
         else
           p ¡Hola #{user.nombre} #{user.apellido_pat} alias #{user.username}! ¿Qué deseas encriptar hoy?

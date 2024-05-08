@@ -21,7 +21,6 @@ body
           div.input-box
             select(name="algoritmo", id="algoritmo")
               option(value="cesar") Código César
-              option(value="sustitucion") Sustitución
               option(value="base") Base 64
               option(value="hexa") Hexadecimal
               option(value="binario") Binario
@@ -35,7 +34,7 @@ script.
 
   algoritmoSelect.addEventListener('change', function() {
     const selectedAlgorithm = algoritmoSelect.value;
-    if (selectedAlgorithm === 'cesar' || selectedAlgorithm === 'sustitucion') {
+    if (selectedAlgorithm === 'cesar') {
       claveCifradoInput.style.display = 'block';
       claveCifradoInput.setAttribute('required', 'true');
       claveCifradoInput.setAttribute('max', selectedAlgorithm === 'cesar' ? '26' : '26');
@@ -47,7 +46,7 @@ script.
 
   function validarTexto() {
     var algoritmoSeleccionado = document.getElementById('algoritmo').value;
-    if ((algoritmoSeleccionado === 'cesar' || algoritmoSeleccionado === 'sustitucion') && claveCifradoInput.value.trim() === '') {
+    if ((algoritmoSeleccionado === 'cesar') && claveCifradoInput.value.trim() === '') {
       document.querySelector('.error-message').textContent = 'Ingresa la clave de cifrado';
       return false;
     }

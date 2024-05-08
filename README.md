@@ -86,3 +86,15 @@ ADD CONSTRAINT username_unique UNIQUE (username);
 > **NOTA: El backup de la base de datos ya viene en la carpeta de _database_connections_ en caso de querer simplemente importarla.**
 
 Por último maneja variables de entorno por lo que se deberá de configurar estas mismas con la información del usuario. Es importante realizar cada uno de estos pasos para tener la aplicación lo más optimizada posible.
+
+## Consideraciones con las variables de entorno:
+El proyecto maneja las siguientes variables de entorno _(esto dentro del archivo .env)_:
+```
+DB_HOST=tu_host
+DB_USER=_tu_usuario_de_mysql
+DB_PASSWORD=tu_contraseña
+DB_NAME=nombre_de_la_base_de_datos
+DB_CONNECTION_LIMIT=limites_de_conexiones
+SESSION_SECRET=clave_secreta_de_sesion
+ACCESS_TOKEN_SECRET=token_secreto
+```

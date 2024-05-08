@@ -1,6 +1,7 @@
 // cifrarController.js
 const guardarCifradoController = require('./guardarCifradoController');
 const cifrarCesar = require('../encode/cifrarCesar');
+const cifrarPolibio = require('../encode/cifrarPolibio');
 const cifrarBinario = require('../encode/cifrarBinario');
 const cifrarHexa = require('../encode/cifrarHexa');
 const cifrarBase64 = require('../encode/cifrarBase');
@@ -24,6 +25,10 @@ async function cifrarTexto(req, res) {
             const claveCesar = parseInt(req.body['clave-cifrado']); // Convertir la clave a número entero
             console.log("Cifrando texto utilizando el algoritmo César...");
             textoCifrado = cifrarCesar(textoOriginal, claveCesar);
+            break;
+        case 'polibio':
+            console.log("Cifrando texto utilizando la sustitución de Polibio...");
+            textoCifrado = cifrarPolibio(textoOriginal);
             break;
         case 'binario':
             console.log("Cifrando texto utilizando el algoritmo binario...");

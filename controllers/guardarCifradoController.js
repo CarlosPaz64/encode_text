@@ -18,8 +18,8 @@ guardarCifradoController.guardarConversionSinUsuario = async (req, textoOriginal
       texto_por_convertir: textoOriginal,
       texto_criptado: textoCifrado,
       algoritmo: algoritmo,
-      clave_sin_usuario: req.body['clave-cifrado'], // Agregar la clave aquí
-      fecha_encode_sin_usuario: new Date() // Agregar la fecha actual aquí
+      clave_sin_usuario: req.body['clave-cifrado'], 
+      fecha_encode_sin_usuario: new Date()
     };
     console.log(conversionData);
     const resultado = await ConversionSinUsuario.create(conversionData);
@@ -44,8 +44,8 @@ guardarCifradoController.guardarConversionConUsuario = async (req, idUsuario, te
       texto_por_convertir_usuario: textoOriginal,
       texto_criptado_usuario: textoCifrado,
       algoritmo: algoritmo,
-      clave_con_usuario: req.body['clave-cifrado'], // Agregar la clave aquí
-      fecha_encode_con_usuario: new Date() // Agregar la fecha actual aquí
+      clave_con_usuario: req.body['clave-cifrado'], 
+      fecha_encode_con_usuario: new Date() 
     };
     const resultado = await ConversionConUsuario.create(conversionData);
     console.log('Resultado de la operación de guardado (con usuario):', resultado);

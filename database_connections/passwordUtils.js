@@ -30,7 +30,8 @@ const comparePassword = async (password, hashedPassword) => {
 const hashContraseña = async (password) => {
     try {
         // Genera un hash para la contraseña utilizando bcrypt
-        const hashedPassword = await bcrypt.hash(password, 10); // El segundo parámetro es el número de rondas de encriptación
+        const hashedPassword = await bcrypt.hash(password, 10); // El segundo parámetro es el número de rondas de encriptacióm
+        // El manejo de saltos de sal se manejó así por practicidad
         return hashedPassword;
     } catch (error) {
         console.error('Error al generar hash para la contraseña:', error);

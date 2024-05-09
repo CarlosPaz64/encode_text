@@ -8,51 +8,66 @@ const cifrarBase64 = require('../encode/cifrarBase');
 const ConversionSinUsuario = require('../database_connections/tablasCifrados').ConversionSinUsuario;
 const ConversionConUsuario = require('../database_connections/tablasCifrados').ConversionConUsuario;
 
+// Creación de un controlador para manejar los diferentes tipos de cifrados
+
 
 async function cifrarTexto(req, res) {
     console.log("Solicitud recibida para cifrar texto.");
     console.log("Datos del formulario recibidos:", req.body);
 
+    // Obtención de los valores a cifrar considerando el algoritmo escogido
     const textoOriginal = req.body['texto-a-cifrar'];
     const algoritmo = req.body['algoritmo'];
     let textoCifrado;
 
+    // Debugging
     console.log("Texto original:", textoOriginal);
     console.log("Algoritmo de cifrado:", algoritmo);
 
-    switch (algoritmo) {
+    switch (algoritmo) { // Manejo de casos
         case 'cesar':
             const claveCesar = parseInt(req.body['clave-cifrado']); // Convertir la clave a número entero
+            // Debuging
             console.log("Cifrando texto utilizando el algoritmo César...");
             textoCifrado = cifrarCesar(textoOriginal, claveCesar);
             break;
         case 'polibio':
+            // Debuging
             console.log("Cifrando texto utilizando la sustitución de Polibio...");
             textoCifrado = cifrarPolibio(textoOriginal);
             break;
         case 'binario':
+            // Debuging
             console.log("Cifrando texto utilizando el algoritmo binario...");
             textoCifrado = cifrarBinario(textoOriginal);
             break;
         case 'hexa':
+            // Debuging
             console.log("Cifrando texto utilizando el algoritmo hexadecimal...");
             textoCifrado = cifrarHexa(textoOriginal);
             break;
         case 'base':
+            // Debuging
             console.log("Cifrando texto utilizando el algoritmo Base64...");
             textoCifrado = cifrarBase64(textoOriginal);
             break;
         default:
+            // Debuging
             console.error("Algoritmo de cifrado no válido:", algoritmo);
             return res.status(400).send('Algoritmo de cifrado no válido');
     }
 
+    // Debuging
     console.log("Texto cifrado:", textoCifrado);
 
     try {
+        // Debuging
         console.log("Guardando el cifrado en la base de datos...");
         let resultado;
         console.log(req.isAuthenticated());
+        // Debuging
+
+        // Guardado en las tablas de la base de datos según sea el caso
     
         if (!req.isAuthenticated()) {
             resultado = await guardarCifradoController.guardarConversionSinUsuario(req, textoOriginal, textoCifrado, algoritmo);

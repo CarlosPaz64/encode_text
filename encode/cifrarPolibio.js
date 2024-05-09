@@ -15,15 +15,21 @@ function cifrarPolibio(textoOriginal) {
         // Convertir el carácter a mayúsculas para compararlo con la matriz
         const caracter = textoOriginal[i].toUpperCase();
 
-        // Buscar el carácter en la matriz de Polibio
-        for (let fila = 0; fila < matrizPolibio.length; fila++) {
-            for (let columna = 0; columna < matrizPolibio[fila].length; columna++) {
-                if (matrizPolibio[fila][columna].includes(caracter)) {
-                    // Agregar las coordenadas al texto cifrado (empezando desde 1)
-                    textoCifrado += `(${fila + 1},${columna + 1}) `;
-                    break;
+        // Verificar si el caracter es una letra
+        if (/^[A-Z]$/.test(caracter)) {
+            // Buscar el carácter en la matriz de Polibio
+            for (let fila = 0; fila < matrizPolibio.length; fila++) {
+                for (let columna = 0; columna < matrizPolibio[fila].length; columna++) {
+                    if (matrizPolibio[fila][columna].includes(caracter)) {
+                        // Agregar las coordenadas al texto cifrado (empezando desde 1)
+                        textoCifrado += `(${fila + 1},${columna + 1}) `;
+                        break;
+                    }
                 }
             }
+        } else {
+            // Si el carácter no es una letra, añadirlo al texto cifrado sin cifrarlo
+            textoCifrado += caracter;
         }
     }
 

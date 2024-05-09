@@ -10,7 +10,7 @@ dotenv.config();
 // Función para registrar el inicio de sesión
 async function registrarLogin(idUsuario) {
     try {
-        await registrarInicioSesion(idUsuario, new Date());
+        await registrarInicioSesion(idUsuario, new Date()); // Se registra la hora y fecha exacta del login
     } catch (error) {
         console.error('Error al registrar el inicio de sesión:', error);
         throw error;
@@ -20,7 +20,7 @@ async function registrarLogin(idUsuario) {
 // Función para registrar el cierre de sesión
 async function registrarLogout(idUsuario) {
     try {
-        await actualizarCierreSesion(idUsuario, new Date());
+        await actualizarCierreSesion(idUsuario, new Date()); // Se registra la hora y fecha exacta del logout
     } catch (error) {
         console.error('Error al registrar el cierre de sesión:', error);
         throw error;
@@ -32,7 +32,7 @@ function generateToken(userId) {
     const expiresIn = 3600; // 1 hora (en segundos :D)
 
     // Genera el token con el tiempo de vida especificado
-    const token = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn });
+    const token = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn }); // Llamada a la variable del tiempo de vida del token
     console.log('Token generado:', token);
     console.log('Expires in:', expiresIn, 'seconds'); // Agregar el console.log para mostrar el tiempo de vida
     return token;
@@ -85,11 +85,11 @@ async function authenticate(req, res, next) {
 // Función para autenticar usuario
 async function authenticateUser(username, password, done) {
     try {
-        const user = await usuarios.obtenerUsuarioPorUsername(username);
+        const user = await usuarios.obtenerUsuarioPorUsername(username); // Obtiene el username del usuario para mostrarlo
         if (!user) {
             return done(null, false, { message: 'Usuario incorrecto.' });
         }
-        const passwordMatch = await passwordUtils.comparePassword(password, user.password_hash);
+        const passwordMatch = await passwordUtils.comparePassword(password, user.password_hash); // Comparación de contraseñas
         if (!passwordMatch) {
             return done(null, false, { message: 'Contraseña incorrecta.' });
         }
@@ -111,7 +111,7 @@ async function autenticarCifrados(req, res, next) {
         }
 
         // Verifica el token usando la clave secreta
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET); // Creación de una función para el manejo de sesiones
         
         // Si el token es válido, permite que la solicitud continúe
         next();

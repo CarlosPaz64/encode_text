@@ -4,7 +4,7 @@ const ConversionesModel = require('../models/conversionesModel');
 
 // Controlador para obtener conversiones por ID de usuario
 const obtenerConversionesPorIdUsuario = async (req, res) => {
-    const idUsuario = req.params.idUsuario; // Suponiendo que el ID de usuario está en los parámetros de la solicitud
+    const idUsuario = req.params.idUsuario; // ID del usuario como parámetro
     const usuario = req.user; // Obtiene el usuario de la solicitud
 
     try {

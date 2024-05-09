@@ -114,7 +114,7 @@ app.use('/cifrar', cifradoMiddleware);
 app.use('/logout', authMiddleware.authenticate, async (req, res, next) => {
   try {
     if (req.user && req.user.id) {
-      await authMiddleware.registrarLogout(req.user.id);
+      await authMiddleware.registrarLogout(req.user.id); // Registro del logout e inserción de datos a la base de datos
     } else {
       console.error('No se puede cerrar sesión: usuario no autenticado.');
     }

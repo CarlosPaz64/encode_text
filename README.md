@@ -88,7 +88,7 @@ ADD CONSTRAINT username_unique UNIQUE (username); -- Añadido de un constraint p
 -- DROP DATABASE encode_text;
 -- Comentario para dropear la base de datos (prueba y error)
 ```
-> **NOTA: El backup de la base de datos ya viene en la carpeta de _database_connections_ en caso de querer simplemente importarla.**
+> **NOTA: La base de datos ya viene en la carpeta de _database_connections_.**
 
 Por último maneja variables de entorno por lo que se deberá de configurar estas mismas con la información del usuario. Es importante realizar cada uno de estos pasos para tener la aplicación lo más optimizada posible.
 

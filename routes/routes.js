@@ -3,7 +3,6 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const loginRouter = require('./login');
 const cifrarRouter = require('./cifrar');
-const cifradoController = require('../controllers/obtenerCifradoPorId');
 
 // Ruta para mostrar el formulario de registro (GET)
 router.get('/registro', userController.mostrarFormularioRegistro);

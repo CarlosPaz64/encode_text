@@ -32,7 +32,7 @@ Así mismo el proyecto utilizan los siguientes scripts para optimizar tareas:
 + Para compilar el proyecto coloca dentro del apartado de `scripts` esas líneas y dentro de la terminal escribe `npm start`.
 ## Se maneja el siguiente esquema de base de datos en MySQL Workbench:
 ```
-CREATE DATABASE encode_text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ CREATE DATABASE encode_text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 -- Configuración para aceptar carácteres especiales como emojis y demás
 
 USE encode_text; -- Llamada a la base de datos recién creada
